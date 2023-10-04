@@ -1,0 +1,41 @@
+name: Terraform AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Install InfraCost CLI
+        run: curl -sL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | bash
+
+      - name: Terraform Init
+        working-directory: .
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: .
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: .
+        run: terraform apply -auto-approve
+
+      # - name: Terraform Destroy
+      #   working-directory: .
+      #   run: terraform destroy -auto-approve
