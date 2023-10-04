@@ -19,11 +19,8 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-1
-
-      - name: Install InfraCost CLI
-        run: curl -sL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | bash
-
+          aws-region: us-east-1
+          
       - name: Terraform Init
         working-directory: .
         run: terraform init
